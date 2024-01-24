@@ -9,21 +9,25 @@
 /* Begin PBXBuildFile section */
 		83526BF52B60FD580058B804 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83526BF42B60FD580058B804 /* AppDelegate.swift */; };
 		83526BF72B60FD580058B804 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83526BF62B60FD580058B804 /* SceneDelegate.swift */; };
-		83526BF92B60FD580058B804 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83526BF82B60FD580058B804 /* ViewController.swift */; };
-		83526BFC2B60FD580058B804 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83526BFA2B60FD580058B804 /* Main.storyboard */; };
+		83526BF92B60FD580058B804 /* CoinListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83526BF82B60FD580058B804 /* CoinListVC.swift */; };
 		83526BFE2B60FD5A0058B804 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 83526BFD2B60FD5A0058B804 /* Assets.xcassets */; };
 		83526C012B60FD5A0058B804 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83526BFF2B60FD5A0058B804 /* LaunchScreen.storyboard */; };
+		83526C0A2B60FEA40058B804 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 83526C092B60FEA40058B804 /* SnapKit */; };
+		83526C0C2B60FEA40058B804 /* SnapKit-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 83526C0B2B60FEA40058B804 /* SnapKit-Dynamic */; };
+		83526C0E2B6101050058B804 /* Coin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83526C0D2B6101050058B804 /* Coin.swift */; };
+		83526C102B6103A00058B804 /* CoinCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83526C0F2B6103A00058B804 /* CoinCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		83526BF12B60FD580058B804 /* TrendingCoins.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TrendingCoins.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		83526BF42B60FD580058B804 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		83526BF62B60FD580058B804 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		83526BF82B60FD580058B804 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		83526BFB2B60FD580058B804 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		83526BF82B60FD580058B804 /* CoinListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoinListVC.swift; sourceTree = "<group>"; };
 		83526BFD2B60FD5A0058B804 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		83526C002B60FD5A0058B804 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		83526C022B60FD5A0058B804 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		83526C0D2B6101050058B804 /* Coin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coin.swift; sourceTree = "<group>"; };
+		83526C0F2B6103A00058B804 /* CoinCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoinCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,6 +35,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83526C0A2B60FEA40058B804 /* SnapKit in Frameworks */,
+				83526C0C2B60FEA40058B804 /* SnapKit-Dynamic in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -58,8 +64,9 @@
 			children = (
 				83526BF42B60FD580058B804 /* AppDelegate.swift */,
 				83526BF62B60FD580058B804 /* SceneDelegate.swift */,
-				83526BF82B60FD580058B804 /* ViewController.swift */,
-				83526BFA2B60FD580058B804 /* Main.storyboard */,
+				83526BF82B60FD580058B804 /* CoinListVC.swift */,
+				83526C0F2B6103A00058B804 /* CoinCell.swift */,
+				83526C0D2B6101050058B804 /* Coin.swift */,
 				83526BFD2B60FD5A0058B804 /* Assets.xcassets */,
 				83526BFF2B60FD5A0058B804 /* LaunchScreen.storyboard */,
 				83526C022B60FD5A0058B804 /* Info.plist */,
@@ -83,6 +90,10 @@
 			dependencies = (
 			);
 			name = TrendingCoins;
+			packageProductDependencies = (
+				83526C092B60FEA40058B804 /* SnapKit */,
+				83526C0B2B60FEA40058B804 /* SnapKit-Dynamic */,
+			);
 			productName = TrendingCoins;
 			productReference = 83526BF12B60FD580058B804 /* TrendingCoins.app */;
 			productType = "com.apple.product-type.application";
@@ -111,6 +122,9 @@
 				Base,
 			);
 			mainGroup = 83526BE82B60FD580058B804;
+			packageReferences = (
+				83526C082B60FEA40058B804 /* XCRemoteSwiftPackageReference "SnapKit" */,
+			);
 			productRefGroup = 83526BF22B60FD580058B804 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -127,7 +141,6 @@
 			files = (
 				83526C012B60FD5A0058B804 /* LaunchScreen.storyboard in Resources */,
 				83526BFE2B60FD5A0058B804 /* Assets.xcassets in Resources */,
-				83526BFC2B60FD580058B804 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -138,7 +151,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				83526BF92B60FD580058B804 /* ViewController.swift in Sources */,
+				83526C0E2B6101050058B804 /* Coin.swift in Sources */,
+				83526BF92B60FD580058B804 /* CoinListVC.swift in Sources */,
+				83526C102B6103A00058B804 /* CoinCell.swift in Sources */,
 				83526BF52B60FD580058B804 /* AppDelegate.swift in Sources */,
 				83526BF72B60FD580058B804 /* SceneDelegate.swift in Sources */,
 			);
@@ -147,14 +162,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		83526BFA2B60FD580058B804 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				83526BFB2B60FD580058B804 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		83526BFF2B60FD5A0058B804 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -218,7 +225,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -275,7 +282,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -297,9 +304,9 @@
 				INFOPLIST_FILE = TrendingCoins/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -307,9 +314,12 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.aitolkunanarbekova.TrendingCoins;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -325,9 +335,9 @@
 				INFOPLIST_FILE = TrendingCoins/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -335,9 +345,12 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.aitolkunanarbekova.TrendingCoins;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -363,6 +376,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		83526C082B60FEA40058B804 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.7.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		83526C092B60FEA40058B804 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 83526C082B60FEA40058B804 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+		83526C0B2B60FEA40058B804 /* SnapKit-Dynamic */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 83526C082B60FEA40058B804 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = "SnapKit-Dynamic";
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 83526BE92B60FD580058B804 /* Project object */;
 }

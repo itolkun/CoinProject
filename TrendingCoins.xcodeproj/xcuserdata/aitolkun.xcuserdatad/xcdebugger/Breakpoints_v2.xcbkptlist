@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "8C82F995-B1AB-4B5A-AC1D-9A84E539C55F"
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "7CB73B5F-D74F-46BF-8285-D878535C4458"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TrendingCoins/ViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "18"
+            endingLineNumber = "18"
+            landmarkName = "viewDidLoad()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "7CB73B5F-D74F-46BF-8285-D878535C4458 - 35e824949192ea02"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "TrendingCoins.ViewController.viewDidLoad() -&gt; ()"
+                  moduleName = "TrendingCoins"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/aitolkun/projects/TrendingCoins/TrendingCoins/ViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "16"
+                  endingLineNumber = "16"
+                  offsetFromSymbolStart = "228">
+               </Location>
+               <Location
+                  uuid = "7CB73B5F-D74F-46BF-8285-D878535C4458 - 35e824949192ea02"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "TrendingCoins.ViewController.viewDidLoad() -&gt; ()"
+                  moduleName = "TrendingCoins"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/aitolkun/projects/TrendingCoins/TrendingCoins/ViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "16"
+                  endingLineNumber = "16"
+                  offsetFromSymbolStart = "120">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>
