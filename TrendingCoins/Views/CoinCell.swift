@@ -9,7 +9,7 @@ import UIKit
 
 class CoinCell: UITableViewCell {
     
-    let coinImageView: UIImageView = {
+    lazy var coinImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.layer.cornerRadius = 10
@@ -18,36 +18,24 @@ class CoinCell: UITableViewCell {
         return imageView
     }()
     
-    let coinTitleLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 15, weight: .regular)
-        label.textColor = .white
-        return label
-    }()
     
-    let coinSubtitleLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 12, weight: .semibold)
-        label.textColor = .gray
-        label.numberOfLines = 0
-        return label
+    lazy var coinTitleLabel: UILabel = {
+        return makeLabel(fontSize: 15, textColor: .white)
     }()
-    
-    let coinCostLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 15, weight: .regular)
-        label.textColor = .white
-        label.numberOfLines = 0
-        return label
+
+    lazy var coinSubtitleLabel: UILabel = {
+        return makeLabel(fontSize: 12, textColor: .gray)
     }()
-    
-    let coinChangedLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 12, weight: .regular)
-        label.numberOfLines = 0
-        return label
+
+    lazy var coinCostLabel: UILabel = {
+        return makeLabel(fontSize: 15, textColor: .white)
     }()
-    
+
+    lazy var coinChangedLabel: UILabel = {
+        return makeLabel(fontSize: 12, textColor: .black)
+    }()
+  
+   
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -58,6 +46,10 @@ class CoinCell: UITableViewCell {
         addSubview(coinCostLabel)
         addSubview(coinChangedLabel)
         
+        makeConstraints()
+    }
+    
+    private func makeConstraints() {
         coinImageView.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(16)
             make.centerY.equalToSuperview()
@@ -86,9 +78,20 @@ class CoinCell: UITableViewCell {
             make.bottom.equalToSuperview().offset(-8)
         }
     }
+    
+    
+    private func makeLabel(fontSize: CGFloat, textColor: UIColor) -> UILabel {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: fontSize, weight: .regular)
+        label.textColor = textColor
+        label.numberOfLines = 0
+        return label
+    }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
     func set(coin: Cryptocurrency) {
         
         coinTitleLabel.text = coin.name
@@ -97,13 +100,13 @@ class CoinCell: UITableViewCell {
         if let changePercent = coin.changePercent24Hr {
             let formattedChangePercent = String(format: "%.2f", changePercent)
             
-               if changePercent < 0 {
-                   coinChangedLabel.text = "\(formattedChangePercent)%"
-                   coinChangedLabel.textColor = .red
-               } else {
-                   coinChangedLabel.text = "+ \(formattedChangePercent)%"
-                   coinChangedLabel.textColor = .green
-               }
+            if changePercent < 0 {
+                coinChangedLabel.text = "\(formattedChangePercent)%"
+                coinChangedLabel.textColor = .red
+            } else {
+                coinChangedLabel.text = "+ \(formattedChangePercent)%"
+                coinChangedLabel.textColor = .green
+            }
         }
         
         if let symbol = coin.symbol {

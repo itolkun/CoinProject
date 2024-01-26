@@ -11,89 +11,67 @@ class AssetDetailsVC: UIViewController {
     
     var coin: Cryptocurrency?
     
-    let coinCost: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 22, weight: .regular)
-        label.textColor = .white
-        return label
-    }()
     
-    let volumeWeightedAveragelabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 15, weight: .regular)
-        label.numberOfLines = 0
-        return label
+    lazy var coinCost: UILabel = {
+        return makeLabel(fontSize: 22, textColor: .white)
     }()
-    
-    let coinChangedLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 15, weight: .regular)
-        label.numberOfLines = 0
-        return label
+
+    lazy var volumeWeightedAveragelabel: UILabel = {
+        return makeLabel(fontSize: 15, textColor: .white)
     }()
-    
-    let marketCap: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 16, weight: .regular)
-        label.textColor = .white
-        label.numberOfLines = 0
-        return label
+
+    lazy var coinChangedLabel: UILabel = {
+        return makeLabel(fontSize: 15, textColor: .white)
     }()
-    
-    let supplyl: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 16, weight: .regular)
-        label.textColor = .white
-        label.numberOfLines = 0
-        return label
+
+    lazy var marketCap: UILabel = {
+        return makeLabel(fontSize: 16, textColor: .white)
     }()
-    
-    let volume: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 16, weight: .regular)
-        label.textColor = .white
-        label.numberOfLines = 0
-        return label
+
+    lazy var supplyl: UILabel = {
+        return makeLabel(fontSize: 16, textColor: .white)
     }()
-    
-    let marketCapLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Market Cap"
-        label.font = .systemFont(ofSize: 12, weight: .regular)
-        label.textColor = .gray
-        label.numberOfLines = 0
-        return label
+
+    lazy var volume: UILabel = {
+        return makeLabel(fontSize: 16, textColor: .white)
     }()
-    
-    let supplyLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Supply"
-        label.font = .systemFont(ofSize: 12, weight: .regular)
-        label.textColor = .gray
-        label.numberOfLines = 0
-        return label
+
+    lazy var marketCapLabel: UILabel = {
+        return makeLabel(fontSize: 12, textColor: .gray, text: "Market Cap")
     }()
-    
-    let volumeLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Volume 24Hr"
-        label.font = .systemFont(ofSize: 12, weight: .regular)
-        label.textColor = .gray
-        label.numberOfLines = 0
-        return label
+
+    lazy var supplyLabel: UILabel = {
+        return makeLabel(fontSize: 12, textColor: .gray, text: "Supply")
     }()
-    
+
+    lazy var volumeLabel: UILabel = {
+        return makeLabel(fontSize: 12, textColor: .gray, text: "Volume 24Hr")
+    }()
+
     let stackView = UIStackView()
-    let stackView2 = UIStackView()
+    let stackViewTwo = UIStackView()
 
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(named: "backColor")
-        if let coin = coin?.name {
-            title = coin
-        }
         
+        title = coin?.name
+       
+        labelValues()
+        
+        view.addSubview(coinCost)
+        view.addSubview(coinChangedLabel)
+        view.addSubview(volumeWeightedAveragelabel)
+        view.addSubview(stackView)
+        view.addSubview(stackViewTwo)
+        
+        configureStackView()
+        makeConstraints()
+
+    }
+    
+    private func labelValues() {
         if let priceUsd = coin?.priceUsd {
             coinCost.text = "$ \(String(format: "%.2f", priceUsd))"
         }
@@ -124,11 +102,6 @@ class AssetDetailsVC: UIViewController {
             }
            }
         
-        
-        
-        
-        
-           
         if let marketCapUsd = coin?.marketCapUsd {
             let formattedMarketCap: String
             if marketCapUsd >= 1_000_000_000 {
@@ -164,14 +137,20 @@ class AssetDetailsVC: UIViewController {
             }
             volume.text = "$\(formattedVolume)"
         }
-        
-        
-        view.addSubview(coinCost)
-        view.addSubview(coinChangedLabel)
-        view.addSubview(volumeWeightedAveragelabel)
-
-        
-        
+    }
+    
+    
+    private func makeLabel(fontSize: CGFloat, textColor: UIColor, text: String? = nil) -> UILabel {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: fontSize, weight: .regular)
+        label.textColor = textColor
+        label.numberOfLines = 0
+        label.text = text
+        return label
+    }
+    
+    
+    private func configureStackView() {
         stackView.axis = .horizontal
         stackView.spacing = 20
         stackView.alignment = .fill
@@ -182,24 +161,24 @@ class AssetDetailsVC: UIViewController {
         stackView.addArrangedSubview(volumeLabel)
         
         
-        stackView2.axis = .horizontal
-        stackView2.spacing = 20
-        stackView2.alignment = .fill
-        stackView2.distribution = .fillEqually
+        stackViewTwo.axis = .horizontal
+        stackViewTwo.spacing = 20
+        stackViewTwo.alignment = .fill
+        stackViewTwo.distribution = .fillEqually
 
-        stackView2.addArrangedSubview(marketCap)
-        stackView2.addArrangedSubview(supplyl)
-        stackView2.addArrangedSubview(volume)
-                
-        view.addSubview(stackView)
-        view.addSubview(stackView2)
-
+        stackViewTwo.addArrangedSubview(marketCap)
+        stackViewTwo.addArrangedSubview(supplyl)
+        stackViewTwo.addArrangedSubview(volume)
+    }
+    
+    
+    private func makeConstraints() {
         stackView.snp.makeConstraints { make in
             make.top.equalTo(coinChangedLabel.snp.bottom).offset(20)
             make.leading.equalToSuperview().offset(20)
             make.trailing.equalToSuperview().inset(20)
         }
-        stackView2.snp.makeConstraints { make in
+        stackViewTwo.snp.makeConstraints { make in
             make.top.equalTo(stackView.snp.bottom).offset(2)
             make.leading.equalToSuperview().offset(20)
             make.trailing.equalToSuperview().inset(20)
@@ -220,7 +199,7 @@ class AssetDetailsVC: UIViewController {
             make.centerY.equalTo(volumeWeightedAveragelabel)
         }
         
-        
     }
+    
     
 }
