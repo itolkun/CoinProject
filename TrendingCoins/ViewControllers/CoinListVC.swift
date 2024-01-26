@@ -10,8 +10,8 @@ import SnapKit
 
 class CoinListVC: UIViewController {
     
-    private var tableView = UITableView()
-    private var searchBar = UISearchBar()
+    private let tableView = UITableView()
+    private let searchBar = UISearchBar()
     
     var cryptocurrencies: [Cryptocurrency] = []
     var filteredCryptocurrencies: [Cryptocurrency]!
@@ -45,7 +45,7 @@ class CoinListVC: UIViewController {
         }
     }
     
-    func fetchData() {
+    private func fetchData() {
         NetworkManager.shared.fetchData { [weak self] cryptocurrencies, error in
             guard let self = self else { return }
             
@@ -63,7 +63,7 @@ class CoinListVC: UIViewController {
         }
     }
     
-    func configureTableView() {
+    private func configureTableView() {
         view.addSubview(tableView)
         setTableViewDelegates()
         tableView.rowHeight = 50
@@ -73,16 +73,14 @@ class CoinListVC: UIViewController {
         }
         tableView.backgroundColor = .clear
         tableView.separatorStyle = .none
-        
-        
     }
     
-    func setTableViewDelegates() {
+    private func setTableViewDelegates() {
         tableView.delegate = self
         tableView.dataSource = self
     }
     
-    func configureSearchBar() {
+    private func configureSearchBar() {
         searchBar.delegate = self
         searchBar.placeholder = "Search"
         searchBar.tintColor = .white
@@ -90,7 +88,7 @@ class CoinListVC: UIViewController {
         navigationItem.hidesSearchBarWhenScrolling = true
     }
     
-    func configureNavigationBar() {
+    private func configureNavigationBar() {
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(searchButtonTapped))
     }
     
@@ -125,11 +123,7 @@ extension CoinListVC: UITableViewDelegate, UITableViewDataSource {
         detailVC.coin = selectedCoin
         navigationController?.pushViewController(detailVC, animated: true)
     }
-    
-    
 }
-
-
 
 // MARK: - UISearchBar
 
@@ -141,9 +135,7 @@ extension CoinListVC: UISearchBarDelegate {
         
     }
     
-    
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        
         filteredCryptocurrencies = cryptocurrencies.filter { cryptocurrency in
             let lowercaseSearchText = searchText.lowercased()
             if let id = cryptocurrency.id, let symbol = cryptocurrency.symbol {

@@ -9,7 +9,7 @@ import UIKit
 
 class CoinCell: UITableViewCell {
     
-    var coinImageView: UIImageView = {
+    let coinImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.layer.cornerRadius = 10
@@ -90,7 +90,6 @@ class CoinCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     func set(coin: Cryptocurrency) {
-        
         
         coinTitleLabel.text = coin.name
         coinSubtitleLabel.text = coin.symbol

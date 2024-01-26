@@ -82,6 +82,7 @@ class AssetDetailsVC: UIViewController {
         label.numberOfLines = 0
         return label
     }()
+    
     let stackView = UIStackView()
     let stackView2 = UIStackView()
 
