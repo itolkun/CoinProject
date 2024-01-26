@@ -8,10 +8,13 @@
 import UIKit
 import SnapKit
 
-class CoinListVC: UIViewController {
+class CoinListVC: UIViewController, UISearchBarDelegate {
     
     private var tableView = UITableView()
     var coins: [Coin] = []
+    private var isSearchBarVisible = false
+    
+    var searchController = UISearchController(searchResultsController: nil)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,7 +23,9 @@ class CoinListVC: UIViewController {
         title = "Trending Coins"
         coins = fetchData()
         configureTableView()
-
+        configureSearchController()
+        configureNavigationBar()
+        
     }
     
     func configureTableView() {
@@ -38,7 +43,21 @@ class CoinListVC: UIViewController {
         tableView.dataSource = self
     }
     
-    
+    func configureSearchController() {
+           searchController = UISearchController(searchResultsController: nil)
+           searchController.searchBar.delegate = self
+           navigationItem.searchController = searchController
+           navigationItem.hidesSearchBarWhenScrolling = true
+       }
+       
+       func configureNavigationBar() {
+           navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(searchButtonTapped))
+       }
+       
+       @objc private func searchButtonTapped() {
+           isSearchBarVisible.toggle()
+           searchController.isActive = isSearchBarVisible
+       }
 
 }
 
