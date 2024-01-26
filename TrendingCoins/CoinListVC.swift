@@ -15,7 +15,8 @@ class CoinListVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+     
+
         title = "Trending Coins"
         coins = fetchData()
         configureTableView()
@@ -52,6 +53,12 @@ extension CoinListVC: UITableViewDelegate, UITableViewDataSource {
         cell.set(coin: coin)
 
         return cell
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let selectedCoin = coins[indexPath.row]
+        let detailVC = AssetDeatilsVC()
+        detailVC.coin = selectedCoin
+        navigationController?.pushViewController(detailVC, animated: true)
     }
     
     

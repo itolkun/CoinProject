@@ -20,7 +20,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let navController = UINavigationController(rootViewController: CoinListVC())
         navController.navigationBar.prefersLargeTitles = true
+        navController.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+        navController.navigationBar.tintColor = .black
+
+        let backButton = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        navController.navigationBar.topItem?.backBarButtonItem = backButton
         
+
+
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
         window?.rootViewController = navController

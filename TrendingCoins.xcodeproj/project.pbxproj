@@ -16,6 +16,7 @@
 		83526C0C2B60FEA40058B804 /* SnapKit-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 83526C0B2B60FEA40058B804 /* SnapKit-Dynamic */; };
 		83526C0E2B6101050058B804 /* Coin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83526C0D2B6101050058B804 /* Coin.swift */; };
 		83526C102B6103A00058B804 /* CoinCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83526C0F2B6103A00058B804 /* CoinCell.swift */; };
+		83526C462B637B490058B804 /* AssetDeatilsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83526C452B637B490058B804 /* AssetDeatilsVC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		83526C022B60FD5A0058B804 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		83526C0D2B6101050058B804 /* Coin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coin.swift; sourceTree = "<group>"; };
 		83526C0F2B6103A00058B804 /* CoinCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoinCell.swift; sourceTree = "<group>"; };
+		83526C452B637B490058B804 /* AssetDeatilsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetDeatilsVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +67,7 @@
 				83526BF42B60FD580058B804 /* AppDelegate.swift */,
 				83526BF62B60FD580058B804 /* SceneDelegate.swift */,
 				83526BF82B60FD580058B804 /* CoinListVC.swift */,
+				83526C452B637B490058B804 /* AssetDeatilsVC.swift */,
 				83526C0F2B6103A00058B804 /* CoinCell.swift */,
 				83526C0D2B6101050058B804 /* Coin.swift */,
 				83526BFD2B60FD5A0058B804 /* Assets.xcassets */,
@@ -155,6 +158,7 @@
 				83526BF92B60FD580058B804 /* CoinListVC.swift in Sources */,
 				83526C102B6103A00058B804 /* CoinCell.swift in Sources */,
 				83526BF52B60FD580058B804 /* AppDelegate.swift in Sources */,
+				83526C462B637B490058B804 /* AssetDeatilsVC.swift in Sources */,
 				83526BF72B60FD580058B804 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
