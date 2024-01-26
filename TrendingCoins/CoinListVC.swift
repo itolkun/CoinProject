@@ -8,24 +8,24 @@
 import UIKit
 import SnapKit
 
-class CoinListVC: UIViewController, UISearchBarDelegate {
+class CoinListVC: UIViewController {
     
     private var tableView = UITableView()
     private var isSearchBarVisible = false
     
     
-    var searchController = UISearchController(searchResultsController: nil)
-    
     var cryptocurrencies: [Cryptocurrency] = []
-    var filteredCryptocurrencies: [Cryptocurrency] = []
-
+    var filteredCryptocurrencies: [Cryptocurrency]!
+    
+    var searchBar = UISearchBar()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         title = "Trending Coins"
         view.backgroundColor = UIColor(named: "backColor")
-
+        
         configureTableView()
         configureSearchController()
         configureNavigationBar()
@@ -36,7 +36,7 @@ class CoinListVC: UIViewController, UISearchBarDelegate {
         refreshControl.addTarget(self, action: #selector(refreshData(_:)), for: .valueChanged)
         refreshControl.tintColor = .white
         tableView.refreshControl = refreshControl
-
+        
     }
     @objc private func refreshData(_ sender: Any) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
@@ -99,15 +99,16 @@ class CoinListVC: UIViewController, UISearchBarDelegate {
                     }
                     DispatchQueue.main.async {
                         self?.cryptocurrencies = cryptocurrencies
+                        self?.filteredCryptocurrencies = cryptocurrencies
                         self?.tableView.reloadData()
                     }
                 } else {
                     print("Data format is incorrect")
-                   
+                    
                 }
             } catch {
                 print("Error parsing JSON: \(error)")
-
+                
             }
         }
         
@@ -124,8 +125,8 @@ class CoinListVC: UIViewController, UISearchBarDelegate {
         }
         tableView.backgroundColor = .clear
         tableView.separatorStyle = .none
-
-
+        
+        
     }
     
     func setTableViewDelegates() {
@@ -134,9 +135,10 @@ class CoinListVC: UIViewController, UISearchBarDelegate {
     }
     
     func configureSearchController() {
-        searchController = UISearchController(searchResultsController: nil)
-        searchController.searchBar.delegate = self
-        navigationItem.searchController = searchController
+        searchBar.delegate = self
+        searchBar.placeholder = "Search"
+        searchBar.tintColor = .white
+        searchBar.searchTextField.textColor = .white
         navigationItem.hidesSearchBarWhenScrolling = true
     }
     
@@ -145,28 +147,30 @@ class CoinListVC: UIViewController, UISearchBarDelegate {
     }
     
     @objc private func searchButtonTapped() {
-        isSearchBarVisible.toggle()
-        searchController.isActive = isSearchBarVisible
+        navigationItem.titleView = searchBar
+        searchBar.showsCancelButton = true
+        navigationItem.rightBarButtonItem = nil
+        searchBar.becomeFirstResponder()
     }
     
 }
 
 extension CoinListVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-         cryptocurrencies.count
+        filteredCryptocurrencies.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CoinCell") as! CoinCell
         cell.backgroundColor = UIColor(named: "backColor")
-        let coin = cryptocurrencies[indexPath.row]
+        let coin = filteredCryptocurrencies[indexPath.row]
         cell.set(coin: coin)
         
         return cell
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let selectedCoin = cryptocurrencies[indexPath.row]
+        let selectedCoin = filteredCryptocurrencies[indexPath.row]
         let detailVC = AssetDetailsVC()
         detailVC.coin = selectedCoin
         navigationController?.pushViewController(detailVC, animated: true)
@@ -177,20 +181,29 @@ extension CoinListVC: UITableViewDelegate, UITableViewDataSource {
 
 
 
-// MARK: - UISearchResultsUpdating
-extension CoinListVC: UISearchResultsUpdating {
-    func updateSearchResults(for searchController: UISearchController) {
-        let searchText = searchController.searchBar.text?.lowercased() ?? ""
+// MARK: - UISearchBar
+
+extension CoinListVC: UISearchBarDelegate {
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        navigationItem.titleView = nil
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(searchButtonTapped))
+        searchBar.showsCancelButton = false
         
-        if searchText.isEmpty {
-            // If search text is empty, display the entire list of cryptocurrencies
-            filteredCryptocurrencies = cryptocurrencies
-        } else {
-            // Filter the cryptocurrencies based on the search text
-//            filteredCryptocurrencies = cryptocurrencies.filter { $0.id.lowercased().contains(searchText) || $0.symbol.lowercased().contains(searchText) }
+    }
+    
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        
+        filteredCryptocurrencies = cryptocurrencies.filter { cryptocurrency in
+            let lowercaseSearchText = searchText.lowercased()
+            if let id = cryptocurrency.id, let symbol = cryptocurrency.symbol {
+                return id.lowercased().contains(lowercaseSearchText) ||
+                symbol.lowercased().contains(lowercaseSearchText)
+            } else {
+                return true
+            }
         }
         
-        // Reload the table view with the filtered data
         tableView.reloadData()
     }
 }
