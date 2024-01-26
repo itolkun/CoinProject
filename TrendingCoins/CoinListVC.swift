@@ -13,6 +13,7 @@ class CoinListVC: UIViewController, UISearchBarDelegate {
     private var tableView = UITableView()
     private var isSearchBarVisible = false
     
+    
     var searchController = UISearchController(searchResultsController: nil)
     
     var cryptocurrencies: [Cryptocurrency] = []
@@ -152,18 +153,14 @@ class CoinListVC: UIViewController, UISearchBarDelegate {
 
 extension CoinListVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return min(10, cryptocurrencies.count)
+         cryptocurrencies.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CoinCell") as! CoinCell
         cell.backgroundColor = UIColor(named: "backColor")
-        if indexPath.row < cryptocurrencies.count {
-            let coin = cryptocurrencies[indexPath.row]
-            cell.set(coin: coin)
-        } else {
-            cell.textLabel?.text = "No data" 
-        }
+        let coin = cryptocurrencies[indexPath.row]
+        cell.set(coin: coin)
         
         return cell
     }
