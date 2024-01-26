@@ -7,29 +7,35 @@
 
 import UIKit
 
-class AssetDeatilsVC: UIViewController {
+class AssetDetailsVC: UIViewController {
     
     var coin: Cryptocurrency?
     
     let coinCost: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 19, weight: .regular)
-        label.textColor = .black
+        label.font = .systemFont(ofSize: 22, weight: .regular)
+        label.textColor = .white
+        return label
+    }()
+    
+    let volumeWeightedAveragelabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 15, weight: .regular)
+        label.numberOfLines = 0
         return label
     }()
     
     let coinChangedLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 13, weight: .regular)
+        label.font = .systemFont(ofSize: 15, weight: .regular)
         label.numberOfLines = 0
-        label.textColor = .green
         return label
     }()
     
     let marketCap: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 16, weight: .regular)
-        label.textColor = .black
+        label.textColor = .white
         label.numberOfLines = 0
         return label
     }()
@@ -37,7 +43,7 @@ class AssetDeatilsVC: UIViewController {
     let supplyl: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 16, weight: .regular)
-        label.textColor = .black
+        label.textColor = .white
         label.numberOfLines = 0
         return label
     }()
@@ -45,7 +51,7 @@ class AssetDeatilsVC: UIViewController {
     let volume: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 16, weight: .regular)
-        label.textColor = .black
+        label.textColor = .white
         label.numberOfLines = 0
         return label
     }()
@@ -82,7 +88,7 @@ class AssetDeatilsVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor(named: "backColor")
         if let coin = coin?.name {
             title = coin
         }
@@ -91,12 +97,35 @@ class AssetDeatilsVC: UIViewController {
             coinCost.text = "$ \(String(format: "%.2f", priceUsd))"
         }
         
+        
+        if let volumeWeightedAverage = coin?.vwap24Hr {
+            let formattedvwap = String(format: "%.2f", volumeWeightedAverage)
+            
+            if volumeWeightedAverage < 0 {
+                volumeWeightedAveragelabel.text = "- \(formattedvwap)"
+                volumeWeightedAveragelabel.textColor = .red
+            } else {
+                volumeWeightedAveragelabel.text = "+ \(formattedvwap)"
+                volumeWeightedAveragelabel.textColor = .green
+            }
+        }
+        
         if let changePercent24Hr = coin?.changePercent24Hr {
             let formattedChangePercent = String(format: "%.2f", changePercent24Hr)
             
-            coinChangedLabel.text = "\(formattedChangePercent)%"
-            coinChangedLabel.textColor = .green
+            if changePercent24Hr < 0 {
+                coinChangedLabel.text = "(\(formattedChangePercent)%)"
+                coinChangedLabel.textColor = .red
+            } else {
+                coinChangedLabel.text = "(\(formattedChangePercent)%)"
+                coinChangedLabel.textColor = .green
+            }
            }
+        
+        
+        
+        
+        
            
         if let marketCapUsd = coin?.marketCapUsd {
             let formattedMarketCap: String
@@ -137,6 +166,9 @@ class AssetDeatilsVC: UIViewController {
         
         view.addSubview(coinCost)
         view.addSubview(coinChangedLabel)
+        view.addSubview(volumeWeightedAveragelabel)
+
+        
         
         stackView.axis = .horizontal
         stackView.spacing = 20
@@ -175,10 +207,15 @@ class AssetDeatilsVC: UIViewController {
             make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
             make.leading.equalToSuperview().offset(20)
         }
-
-        coinChangedLabel.snp.makeConstraints { make in
+        
+        volumeWeightedAveragelabel.snp.makeConstraints { make in
             make.leading.equalTo(coinCost.snp.trailing).offset(20)
             make.centerY.equalTo(coinCost)
+        }
+
+        coinChangedLabel.snp.makeConstraints { make in
+            make.leading.equalTo(volumeWeightedAveragelabel.snp.trailing).offset(5)
+            make.centerY.equalTo(volumeWeightedAveragelabel)
         }
         
         

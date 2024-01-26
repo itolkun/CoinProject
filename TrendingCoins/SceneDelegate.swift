@@ -18,20 +18,34 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
-        let navController = UINavigationController(rootViewController: CoinListVC())
+        let vc = CoinListVC()
+        
+        let navController = UINavigationController(rootViewController: vc)
         navController.navigationBar.prefersLargeTitles = true
-        navController.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
-        navController.navigationBar.tintColor = .black
+        navController.navigationBar.tintColor = .white
 
         let backButton = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         navController.navigationBar.topItem?.backBarButtonItem = backButton
+
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = UIColor(named: "backColor")
+        appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+        appearance.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+        navController.navigationBar.standardAppearance = appearance
+        navController.navigationBar.scrollEdgeAppearance = appearance
+        navController.navigationBar.compactAppearance = appearance
+        UIBarButtonItem.appearance().tintColor = .white
+
         
-
-
+        
+        
+        
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
         window?.rootViewController = navController
-        window?.makeKeyAndVisible()    }
+        window?.makeKeyAndVisible()
+    }
 
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.

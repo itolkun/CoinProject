@@ -18,26 +18,33 @@ class CoinListVC: UIViewController, UISearchBarDelegate {
     var cryptocurrencies: [Cryptocurrency] = []
     var filteredCryptocurrencies: [Cryptocurrency] = []
 
-    let refreshControl = UIRefreshControl()
+    let refreshControl: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(refreshData(_:)), for: .valueChanged)
+        refreshControl.tintColor = .white
+        return refreshControl
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         
         title = "Trending Coins"
+        view.backgroundColor = UIColor(named: "backColor")
+
         configureTableView()
         configureSearchController()
         configureNavigationBar()
         fetchData()
         filteredCryptocurrencies = cryptocurrencies
+        tableView.refreshControl = refreshControl
 
-        tableView.reloadData()
-
-        
         
     }
-    @objc func refreshData(_ sender: Any) {
+    @objc private func refreshData(_ sender: UIRefreshControl) {
         fetchData()
+        tableView.reloadData()
+        sender.endRefreshing()
     }
     
     func fetchData() {
@@ -98,9 +105,15 @@ class CoinListVC: UIViewController, UISearchBarDelegate {
                     }
                 } else {
                     print("Data format is incorrect")
+                    DispatchQueue.main.async {
+                        self?.refreshControl.endRefreshing()
+                    }
                 }
             } catch {
                 print("Error parsing JSON: \(error)")
+                DispatchQueue.main.async {
+                    self?.refreshControl.endRefreshing()
+                }
             }
         }
         
@@ -109,14 +122,16 @@ class CoinListVC: UIViewController, UISearchBarDelegate {
     
     func configureTableView() {
         view.addSubview(tableView)
-        refreshControl.addTarget(self, action: #selector(refreshData(_:)), for: .valueChanged)
-           tableView.addSubview(refreshControl)
         setTableViewDelegates()
         tableView.rowHeight = 50
         tableView.register(CoinCell.self, forCellReuseIdentifier: "CoinCell")
         tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+        tableView.backgroundColor = .clear
+        tableView.separatorStyle = .none
+
+
     }
     
     func setTableViewDelegates() {
@@ -149,11 +164,12 @@ extension CoinListVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CoinCell") as! CoinCell
+        cell.backgroundColor = UIColor(named: "backColor")
         if indexPath.row < cryptocurrencies.count {
             let coin = cryptocurrencies[indexPath.row]
             cell.set(coin: coin)
         } else {
-            cell.textLabel?.text = "No data" // Placeholder text if data is unavailable
+            cell.textLabel?.text = "No data" 
         }
         
         return cell
@@ -161,7 +177,7 @@ extension CoinListVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let selectedCoin = cryptocurrencies[indexPath.row]
-        let detailVC = AssetDeatilsVC()
+        let detailVC = AssetDetailsVC()
         detailVC.coin = selectedCoin
         navigationController?.pushViewController(detailVC, animated: true)
     }

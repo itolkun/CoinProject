@@ -14,19 +14,20 @@ class CoinCell: UITableViewCell {
         imageView.contentMode = .scaleAspectFill
         imageView.layer.cornerRadius = 10
         imageView.layer.masksToBounds = true
+        imageView.backgroundColor = UIColor(named: "iconColor")
         return imageView
     }()
     
     let coinTitleLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 13, weight: .regular)
-        label.textColor = .black
+        label.font = .systemFont(ofSize: 15, weight: .regular)
+        label.textColor = .white
         return label
     }()
     
     let coinSubtitleLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 11, weight: .semibold)
+        label.font = .systemFont(ofSize: 12, weight: .semibold)
         label.textColor = .gray
         label.numberOfLines = 0
         return label
@@ -35,7 +36,7 @@ class CoinCell: UITableViewCell {
     let coinCostLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 15, weight: .regular)
-        label.textColor = .black
+        label.textColor = .white
         label.numberOfLines = 0
         return label
     }()
@@ -60,7 +61,7 @@ class CoinCell: UITableViewCell {
         coinImageView.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(16)
             make.centerY.equalToSuperview()
-            make.width.height.equalTo(30)
+            make.width.height.equalTo(40)
         }
         
         coinTitleLabel.snp.makeConstraints { make in
@@ -97,8 +98,13 @@ class CoinCell: UITableViewCell {
         if let changePercent = coin.changePercent24Hr {
             let formattedChangePercent = String(format: "%.2f", changePercent)
             
-            coinChangedLabel.textColor = .green
-            coinChangedLabel.text = "\(formattedChangePercent)%"
+               if changePercent < 0 {
+                   coinChangedLabel.text = "\(formattedChangePercent)%"
+                   coinChangedLabel.textColor = .red
+               } else {
+                   coinChangedLabel.text = "+ \(formattedChangePercent)%"
+                   coinChangedLabel.textColor = .green
+               }
         }
         
         if let symbol = coin.symbol {
@@ -130,13 +136,11 @@ class CoinCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         
-        // Configure the view for the selected state
     }
     
 }
