@@ -52,5 +52,53 @@
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "65818207-AC5B-426E-BA43-187B373AA644"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TrendingCoins/CoinListVC.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "127"
+            endingLineNumber = "127"
+            landmarkName = "configureSearchController()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "65818207-AC5B-426E-BA43-187B373AA644 - 96f091029c41a8d8"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "TrendingCoins.CoinListVC.configureSearchController() -&gt; ()"
+                  moduleName = "TrendingCoins"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/aitolkun/projects/TrendingCoins/TrendingCoins/CoinListVC.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "128"
+                  endingLineNumber = "128"
+                  offsetFromSymbolStart = "32">
+               </Location>
+               <Location
+                  uuid = "65818207-AC5B-426E-BA43-187B373AA644 - 96f091029c41a8d8"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "TrendingCoins.CoinListVC.configureSearchController() -&gt; ()"
+                  moduleName = "TrendingCoins"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/aitolkun/projects/TrendingCoins/TrendingCoins/CoinListVC.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "128"
+                  endingLineNumber = "128"
+                  offsetFromSymbolStart = "48">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

@@ -11,12 +11,13 @@ import SnapKit
 class CoinListVC: UIViewController, UISearchBarDelegate {
     
     private var tableView = UITableView()
-    //    var coins: [Coin] = []
     private var isSearchBarVisible = false
     
     var searchController = UISearchController(searchResultsController: nil)
     
     var cryptocurrencies: [Cryptocurrency] = []
+    var filteredCryptocurrencies: [Cryptocurrency] = []
+
     let refreshControl = UIRefreshControl()
     
     override func viewDidLoad() {
@@ -28,7 +29,10 @@ class CoinListVC: UIViewController, UISearchBarDelegate {
         configureSearchController()
         configureNavigationBar()
         fetchData()
-        
+        filteredCryptocurrencies = cryptocurrencies
+
+        tableView.reloadData()
+
         
         
     }
@@ -37,7 +41,7 @@ class CoinListVC: UIViewController, UISearchBarDelegate {
     }
     
     func fetchData() {
-        let urlString = "https://api.coincap.io/v2/assets?limit=10"
+        let urlString = "https://api.coincap.io/v2/assets"
         
         guard let url = URL(string: urlString) else {
             print("Invalid URL")
@@ -155,6 +159,7 @@ extension CoinListVC: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         let selectedCoin = cryptocurrencies[indexPath.row]
         let detailVC = AssetDeatilsVC()
         detailVC.coin = selectedCoin
@@ -164,3 +169,22 @@ extension CoinListVC: UITableViewDelegate, UITableViewDataSource {
     
 }
 
+
+
+// MARK: - UISearchResultsUpdating
+extension CoinListVC: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        let searchText = searchController.searchBar.text?.lowercased() ?? ""
+        
+        if searchText.isEmpty {
+            // If search text is empty, display the entire list of cryptocurrencies
+            filteredCryptocurrencies = cryptocurrencies
+        } else {
+            // Filter the cryptocurrencies based on the search text
+//            filteredCryptocurrencies = cryptocurrencies.filter { $0.id.lowercased().contains(searchText) || $0.symbol.lowercased().contains(searchText) }
+        }
+        
+        // Reload the table view with the filtered data
+        tableView.reloadData()
+    }
+}

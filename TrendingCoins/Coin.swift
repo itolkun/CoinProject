@@ -7,15 +7,6 @@
 
 import UIKit
 
-struct Coin {
-    var image: UIImage
-    var title: String
-    var subtitle: String
-    var cost: String
-    var changedCost: String
-}
-
-
 struct Cryptocurrency {
     let id: String?
     let rank: Int?

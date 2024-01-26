@@ -89,7 +89,8 @@ class CoinCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     func set(coin: Cryptocurrency) {
-        //        coinImageView.image = coin.image
+        
+        
         coinTitleLabel.text = coin.name
         coinSubtitleLabel.text = coin.symbol
         coinCostLabel.text = "$ \(String(format: "%.2f", coin.priceUsd ?? 0.0))"
@@ -99,6 +100,32 @@ class CoinCell: UITableViewCell {
             coinChangedLabel.textColor = .green
             coinChangedLabel.text = "\(formattedChangePercent)%"
         }
+        
+        if let symbol = coin.symbol {
+            let urlString = "https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/32/icon/\(symbol.lowercased()).png"
+            
+            if let url = URL(string: urlString) {
+                let task = URLSession.shared.dataTask(with: url) { [weak self] (data, response, error) in
+                    if let error = error {
+                        print("Error fetching image: \(error)")
+                        return
+                    }
+                    
+                    guard let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) else {
+                        print("Invalid response")
+                        return
+                    }
+                    
+                    if let data = data, let image = UIImage(data: data) {
+                        DispatchQueue.main.async {
+                            self?.coinImageView.image = image
+                        }
+                    }
+                }
+                task.resume()
+            }
+        }
+        
     }
     
     override func awakeFromNib() {
