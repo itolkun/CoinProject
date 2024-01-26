@@ -19,14 +19,14 @@ class CoinCell: UITableViewCell {
     
     let coinTitleLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 12, weight: .regular)
+        label.font = .systemFont(ofSize: 13, weight: .regular)
         label.textColor = .black
         return label
     }()
     
     let coinSubtitleLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 10, weight: .semibold)
+        label.font = .systemFont(ofSize: 11, weight: .semibold)
         label.textColor = .gray
         label.numberOfLines = 0
         return label
@@ -34,7 +34,7 @@ class CoinCell: UITableViewCell {
     
     let coinCostLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 12, weight: .regular)
+        label.font = .systemFont(ofSize: 15, weight: .regular)
         label.textColor = .black
         label.numberOfLines = 0
         return label
@@ -42,9 +42,8 @@ class CoinCell: UITableViewCell {
     
     let coinChangedLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 9, weight: .regular)
+        label.font = .systemFont(ofSize: 12, weight: .regular)
         label.numberOfLines = 0
-        label.textColor = .green
         return label
     }()
     
@@ -89,12 +88,17 @@ class CoinCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    func set(coin: Coin) {
-        coinImageView.image = coin.image
-        coinTitleLabel.text = coin.title
-        coinSubtitleLabel.text = coin.subtitle
-        coinCostLabel.text = coin.cost
-        coinChangedLabel.text = coin.changedCost
+    func set(coin: Cryptocurrency) {
+        //        coinImageView.image = coin.image
+        coinTitleLabel.text = coin.name
+        coinSubtitleLabel.text = coin.symbol
+        coinCostLabel.text = "$ \(String(format: "%.2f", coin.priceUsd ?? 0.0))"
+        if let changePercent = coin.changePercent24Hr {
+            let formattedChangePercent = String(format: "%.2f", changePercent)
+            
+            coinChangedLabel.textColor = .green
+            coinChangedLabel.text = "\(formattedChangePercent)%"
+        }
     }
     
     override func awakeFromNib() {

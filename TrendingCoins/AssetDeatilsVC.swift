@@ -9,11 +9,10 @@ import UIKit
 
 class AssetDeatilsVC: UIViewController {
     
-    var coin: Coin?
+    var coin: Cryptocurrency?
     
     let coinCost: UILabel = {
         let label = UILabel()
-        label.text = "$ 22 678.48"
         label.font = .systemFont(ofSize: 19, weight: .regular)
         label.textColor = .black
         return label
@@ -21,8 +20,6 @@ class AssetDeatilsVC: UIViewController {
     
     let coinChangedLabel: UILabel = {
         let label = UILabel()
-        label.text = "+100.48(4.32%)"
-
         label.font = .systemFont(ofSize: 13, weight: .regular)
         label.numberOfLines = 0
         label.textColor = .green
@@ -31,18 +28,14 @@ class AssetDeatilsVC: UIViewController {
     
     let marketCap: UILabel = {
         let label = UILabel()
-        label.text = "$518.99"
-
         label.font = .systemFont(ofSize: 16, weight: .regular)
         label.textColor = .black
         label.numberOfLines = 0
         return label
     }()
     
-    let supply: UILabel = {
+    let supplyl: UILabel = {
         let label = UILabel()
-        label.text = "19.38m"
-
         label.font = .systemFont(ofSize: 16, weight: .regular)
         label.textColor = .black
         label.numberOfLines = 0
@@ -51,8 +44,6 @@ class AssetDeatilsVC: UIViewController {
     
     let volume: UILabel = {
         let label = UILabel()
-        label.text = "$3.52b"
-
         label.font = .systemFont(ofSize: 16, weight: .regular)
         label.textColor = .black
         label.numberOfLines = 0
@@ -92,8 +83,55 @@ class AssetDeatilsVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        if let coin = coin?.title {
+        if let coin = coin?.name {
             title = coin
+        }
+        
+        if let priceUsd = coin?.priceUsd {
+            coinCost.text = "$ \(String(format: "%.2f", priceUsd))"
+        }
+        
+        if let changePercent24Hr = coin?.changePercent24Hr {
+            let formattedChangePercent = String(format: "%.2f", changePercent24Hr)
+            
+            coinChangedLabel.text = "\(formattedChangePercent)%"
+            coinChangedLabel.textColor = .green
+           }
+           
+        if let marketCapUsd = coin?.marketCapUsd {
+            let formattedMarketCap: String
+            if marketCapUsd >= 1_000_000_000 {
+                formattedMarketCap = String(format: "%.2fb", marketCapUsd / 1_000_000_000)
+            } else if marketCapUsd >= 1_000_000 {
+                formattedMarketCap = String(format: "%.2fm", marketCapUsd / 1_000_000)
+            } else {
+                formattedMarketCap = String(format: "%.2f", marketCapUsd)
+            }
+            marketCap.text = "$\(formattedMarketCap)"
+        }
+           
+        if let supply = coin?.supply {
+            let formattedSupply: String
+            if supply >= 1_000_000_000 {
+                formattedSupply = String(format: "%.2fb", supply / 1_000_000_000)
+            } else if supply >= 1_000_000 {
+                formattedSupply = String(format: "%.2fm", supply / 1_000_000)
+            } else {
+                formattedSupply = String(format: "%.2f", supply)
+            }
+            supplyl.text = formattedSupply
+        }
+           
+        if let volumeUsd24Hr = coin?.volumeUsd24Hr {
+            let formattedVolume: String
+            if volumeUsd24Hr >= 1_000_000_000 {
+                formattedVolume = String(format: "%.2fb", volumeUsd24Hr / 1_000_000_000)
+            } else if volumeUsd24Hr >= 1_000_000 {
+                formattedVolume = String(format: "%.2fm", volumeUsd24Hr / 1_000_000)
+            } else {
+                formattedVolume = String(format: "%.2f", volumeUsd24Hr)
+            }
+            volume.text = "$\(formattedVolume)"
         }
         
         
@@ -116,7 +154,7 @@ class AssetDeatilsVC: UIViewController {
         stackView2.distribution = .fillEqually
 
         stackView2.addArrangedSubview(marketCap)
-        stackView2.addArrangedSubview(supply)
+        stackView2.addArrangedSubview(supplyl)
         stackView2.addArrangedSubview(volume)
                 
         view.addSubview(stackView)

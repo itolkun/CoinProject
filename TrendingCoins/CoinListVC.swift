@@ -11,25 +11,102 @@ import SnapKit
 class CoinListVC: UIViewController, UISearchBarDelegate {
     
     private var tableView = UITableView()
-    var coins: [Coin] = []
+    //    var coins: [Coin] = []
     private var isSearchBarVisible = false
     
     var searchController = UISearchController(searchResultsController: nil)
-
+    
+    var cryptocurrencies: [Cryptocurrency] = []
+    let refreshControl = UIRefreshControl()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-     
-
+        
+        
         title = "Trending Coins"
-        coins = fetchData()
         configureTableView()
         configureSearchController()
         configureNavigationBar()
+        fetchData()
         
+        
+        
+    }
+    @objc func refreshData(_ sender: Any) {
+        fetchData()
+    }
+    
+    func fetchData() {
+        let urlString = "https://api.coincap.io/v2/assets?limit=10"
+        
+        guard let url = URL(string: urlString) else {
+            print("Invalid URL")
+            return
+        }
+        
+        let task = URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
+            guard let data = data, error == nil else {
+                print("Error fetching data: \(error?.localizedDescription ?? "Unknown error")")
+                return
+            }
+            
+            if let jsonString = String(data: data, encoding: .utf8) {
+                print("JSON data received:")
+                print(jsonString)
+            }
+            
+            do {
+                let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+                if let data = json?["data"] as? [[String: Any]] {
+                    var cryptocurrencies: [Cryptocurrency] = []
+                    for item in data {
+                        // Parse cryptocurrency data
+                        guard let id = item["id"] as? String,
+                              let rankString = item["rank"] as? String,
+                              let rank = Int(rankString),
+                              let symbol = item["symbol"] as? String,
+                              let name = item["name"] as? String,
+                              let supplyString = item["supply"] as? String,
+                              let supply = Double(supplyString),
+                              let marketCapUsdString = item["marketCapUsd"] as? String,
+                              let marketCapUsd = Double(marketCapUsdString),
+                              let volumeUsd24HrString = item["volumeUsd24Hr"] as? String,
+                              let volumeUsd24Hr = Double(volumeUsd24HrString),
+                              let priceUsdString = item["priceUsd"] as? String,
+                              let priceUsd = Double(priceUsdString),
+                              let changePercent24HrString = item["changePercent24Hr"] as? String,
+                              let changePercent24Hr = Double(changePercent24HrString),
+                              let vwap24HrString = item["vwap24Hr"] as? String,
+                              let vwap24Hr = Double(vwap24HrString),
+                              let explorer = item["explorer"] as? String else {
+                            print("Failed to parse cryptocurrency data")
+                            continue
+                            
+                        }
+                        let maxSupply = item["maxSupply"] as? Double
+                        let cryptocurrency = Cryptocurrency(id: id, rank: rank, symbol: symbol, name: name, supply: supply, maxSupply: maxSupply, marketCapUsd: marketCapUsd, volumeUsd24Hr: volumeUsd24Hr, priceUsd: priceUsd, changePercent24Hr: changePercent24Hr, vwap24Hr: vwap24Hr, explorer: explorer)
+                        cryptocurrencies.append(cryptocurrency)
+                    }
+                    DispatchQueue.main.async {
+                        self?.cryptocurrencies = cryptocurrencies
+                        self?.tableView.reloadData()
+                        self?.refreshControl.endRefreshing()
+                    }
+                } else {
+                    print("Data format is incorrect")
+                }
+            } catch {
+                print("Error parsing JSON: \(error)")
+            }
+        }
+        
+        task.resume()
     }
     
     func configureTableView() {
         view.addSubview(tableView)
+        refreshControl.addTarget(self, action: #selector(refreshData(_:)), for: .valueChanged)
+           tableView.addSubview(refreshControl)
         setTableViewDelegates()
         tableView.rowHeight = 50
         tableView.register(CoinCell.self, forCellReuseIdentifier: "CoinCell")
@@ -44,37 +121,41 @@ class CoinListVC: UIViewController, UISearchBarDelegate {
     }
     
     func configureSearchController() {
-           searchController = UISearchController(searchResultsController: nil)
-           searchController.searchBar.delegate = self
-           navigationItem.searchController = searchController
-           navigationItem.hidesSearchBarWhenScrolling = true
-       }
-       
-       func configureNavigationBar() {
-           navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(searchButtonTapped))
-       }
-       
-       @objc private func searchButtonTapped() {
-           isSearchBarVisible.toggle()
-           searchController.isActive = isSearchBarVisible
-       }
-
+        searchController = UISearchController(searchResultsController: nil)
+        searchController.searchBar.delegate = self
+        navigationItem.searchController = searchController
+        navigationItem.hidesSearchBarWhenScrolling = true
+    }
+    
+    func configureNavigationBar() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(searchButtonTapped))
+    }
+    
+    @objc private func searchButtonTapped() {
+        isSearchBarVisible.toggle()
+        searchController.isActive = isSearchBarVisible
+    }
+    
 }
 
 extension CoinListVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        coins.count
+        return min(10, cryptocurrencies.count)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CoinCell") as! CoinCell
-        let coin = coins[indexPath.row]
-        cell.set(coin: coin)
-
+        if indexPath.row < cryptocurrencies.count {
+            let coin = cryptocurrencies[indexPath.row]
+            cell.set(coin: coin)
+        } else {
+            cell.textLabel?.text = "No data" // Placeholder text if data is unavailable
+        }
+        
         return cell
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let selectedCoin = coins[indexPath.row]
+        let selectedCoin = cryptocurrencies[indexPath.row]
         let detailVC = AssetDeatilsVC()
         detailVC.coin = selectedCoin
         navigationController?.pushViewController(detailVC, animated: true)
@@ -83,16 +164,3 @@ extension CoinListVC: UITableViewDelegate, UITableViewDataSource {
     
 }
 
-
-extension CoinListVC {
-    func fetchData() -> [Coin] {
-        let coin1 = Coin(image: UIImage(named: "coin")!, title: "Bitcoin", subtitle: "BTS", cost: "1000", changedCost: "8")
-        let coin2 = Coin(image: UIImage(named: "coin")!, title: "Bitcoin", subtitle: "BTS", cost: "1000", changedCost: "-6.8")
-        let coin3 = Coin(image: UIImage(named: "coin")!, title: "Bitcoin", subtitle: "BTS", cost: "1000", changedCost: "8")
-        let coin4 = Coin(image: UIImage(named: "coin")!, title: "Bitcoin", subtitle: "BTS", cost: "1000", changedCost: "+9")
-        let coin5 = Coin(image: UIImage(named: "coin")!, title: "Bitcoin", subtitle: "BTS", cost: "1000", changedCost: "8")
-        let coin6 = Coin(image: UIImage(named: "coin")!, title: "Bitcoin", subtitle: "BTS", cost: "1000", changedCost: "-3.4")
-        let coin7 = Coin(image: UIImage(named: "coin")!, title: "Bitcoin", subtitle: "BTS", cost: "1000", changedCost: "+8")
-        return [coin1, coin2, coin3, coin4, coin5, coin6, coin7]
-    }
-}
