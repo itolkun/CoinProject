@@ -11,14 +11,10 @@ import SnapKit
 class CoinListVC: UIViewController {
     
     private var tableView = UITableView()
-    private var isSearchBarVisible = false
-    
+    private var searchBar = UISearchBar()
     
     var cryptocurrencies: [Cryptocurrency] = []
     var filteredCryptocurrencies: [Cryptocurrency]!
-    
-    var searchBar = UISearchBar()
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,17 +23,21 @@ class CoinListVC: UIViewController {
         view.backgroundColor = UIColor(named: "backColor")
         
         configureTableView()
-        configureSearchController()
+        configureSearchBar()
         configureNavigationBar()
         fetchData()
         filteredCryptocurrencies = cryptocurrencies
+        configureRefreshControl()
         
+    }
+    
+    private func configureRefreshControl() {
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refreshData(_:)), for: .valueChanged)
         refreshControl.tintColor = .white
         tableView.refreshControl = refreshControl
-        
     }
+    
     @objc private func refreshData(_ sender: Any) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
             self.fetchData()
@@ -46,73 +46,21 @@ class CoinListVC: UIViewController {
     }
     
     func fetchData() {
-        let urlString = "https://api.coincap.io/v2/assets"
-        
-        guard let url = URL(string: urlString) else {
-            print("Invalid URL")
-            return
-        }
-        
-        let task = URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
-            guard let data = data, error == nil else {
-                print("Error fetching data: \(error?.localizedDescription ?? "Unknown error")")
-                
+        NetworkManager.shared.fetchData { [weak self] cryptocurrencies, error in
+            guard let self = self else { return }
+            
+            if let error = error {
+                print("Error fetching data: \(error.localizedDescription)")
                 return
             }
-            
-            if let jsonString = String(data: data, encoding: .utf8) {
-                print("JSON data received:")
-                print(jsonString)
-            }
-            
-            do {
-                let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
-                if let data = json?["data"] as? [[String: Any]] {
-                    var cryptocurrencies: [Cryptocurrency] = []
-                    for item in data {
-                        // Parse cryptocurrency data
-                        guard let id = item["id"] as? String,
-                              let rankString = item["rank"] as? String,
-                              let rank = Int(rankString),
-                              let symbol = item["symbol"] as? String,
-                              let name = item["name"] as? String,
-                              let supplyString = item["supply"] as? String,
-                              let supply = Double(supplyString),
-                              let marketCapUsdString = item["marketCapUsd"] as? String,
-                              let marketCapUsd = Double(marketCapUsdString),
-                              let volumeUsd24HrString = item["volumeUsd24Hr"] as? String,
-                              let volumeUsd24Hr = Double(volumeUsd24HrString),
-                              let priceUsdString = item["priceUsd"] as? String,
-                              let priceUsd = Double(priceUsdString),
-                              let changePercent24HrString = item["changePercent24Hr"] as? String,
-                              let changePercent24Hr = Double(changePercent24HrString),
-                              let vwap24HrString = item["vwap24Hr"] as? String,
-                              let vwap24Hr = Double(vwap24HrString),
-                              let explorer = item["explorer"] as? String else {
-                            print("Failed to parse cryptocurrency data")
-                            continue
-                            
-                        }
-                        let maxSupply = item["maxSupply"] as? Double
-                        let cryptocurrency = Cryptocurrency(id: id, rank: rank, symbol: symbol, name: name, supply: supply, maxSupply: maxSupply, marketCapUsd: marketCapUsd, volumeUsd24Hr: volumeUsd24Hr, priceUsd: priceUsd, changePercent24Hr: changePercent24Hr, vwap24Hr: vwap24Hr, explorer: explorer)
-                        cryptocurrencies.append(cryptocurrency)
-                    }
-                    DispatchQueue.main.async {
-                        self?.cryptocurrencies = cryptocurrencies
-                        self?.filteredCryptocurrencies = cryptocurrencies
-                        self?.tableView.reloadData()
-                    }
-                } else {
-                    print("Data format is incorrect")
-                    
+            if let cryptocurrencies = cryptocurrencies {
+                DispatchQueue.main.async {
+                    self.cryptocurrencies = cryptocurrencies
+                    self.filteredCryptocurrencies = cryptocurrencies
+                    self.tableView.reloadData()
                 }
-            } catch {
-                print("Error parsing JSON: \(error)")
-                
             }
         }
-        
-        task.resume()
     }
     
     func configureTableView() {
@@ -134,7 +82,7 @@ class CoinListVC: UIViewController {
         tableView.dataSource = self
     }
     
-    func configureSearchController() {
+    func configureSearchBar() {
         searchBar.delegate = self
         searchBar.placeholder = "Search"
         searchBar.tintColor = .white
@@ -154,6 +102,8 @@ class CoinListVC: UIViewController {
     }
     
 }
+
+// MARK: - TableView
 
 extension CoinListVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
