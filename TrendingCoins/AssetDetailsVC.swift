@@ -101,7 +101,7 @@ class AssetDetailsVC: UIViewController {
         if let volumeWeightedAverage = coin?.vwap24Hr {
             let formattedvwap = String(format: "%.2f", volumeWeightedAverage)
             
-            if volumeWeightedAverage < 0 {
+            if coin?.changePercent24Hr ?? 0.0 < 0 {
                 volumeWeightedAveragelabel.text = "- \(formattedvwap)"
                 volumeWeightedAveragelabel.textColor = .red
             } else {
@@ -114,6 +114,7 @@ class AssetDetailsVC: UIViewController {
             let formattedChangePercent = String(format: "%.2f", changePercent24Hr)
             
             if changePercent24Hr < 0 {
+                let formattedChangePercent = String(format: "%.2f", abs(changePercent24Hr))
                 coinChangedLabel.text = "(\(formattedChangePercent)%)"
                 coinChangedLabel.textColor = .red
             } else {

@@ -18,16 +18,9 @@ class CoinListVC: UIViewController, UISearchBarDelegate {
     var cryptocurrencies: [Cryptocurrency] = []
     var filteredCryptocurrencies: [Cryptocurrency] = []
 
-    let refreshControl: UIRefreshControl = {
-        let refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(refreshData(_:)), for: .valueChanged)
-        refreshControl.tintColor = .white
-        return refreshControl
-    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         
         title = "Trending Coins"
         view.backgroundColor = UIColor(named: "backColor")
@@ -37,14 +30,18 @@ class CoinListVC: UIViewController, UISearchBarDelegate {
         configureNavigationBar()
         fetchData()
         filteredCryptocurrencies = cryptocurrencies
+        
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(refreshData(_:)), for: .valueChanged)
+        refreshControl.tintColor = .white
         tableView.refreshControl = refreshControl
 
-        
     }
-    @objc private func refreshData(_ sender: UIRefreshControl) {
-        fetchData()
-        tableView.reloadData()
-        sender.endRefreshing()
+    @objc private func refreshData(_ sender: Any) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+            self.fetchData()
+            self.tableView.refreshControl?.endRefreshing()
+        }
     }
     
     func fetchData() {
@@ -58,6 +55,7 @@ class CoinListVC: UIViewController, UISearchBarDelegate {
         let task = URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
             guard let data = data, error == nil else {
                 print("Error fetching data: \(error?.localizedDescription ?? "Unknown error")")
+                
                 return
             }
             
@@ -101,19 +99,14 @@ class CoinListVC: UIViewController, UISearchBarDelegate {
                     DispatchQueue.main.async {
                         self?.cryptocurrencies = cryptocurrencies
                         self?.tableView.reloadData()
-                        self?.refreshControl.endRefreshing()
                     }
                 } else {
                     print("Data format is incorrect")
-                    DispatchQueue.main.async {
-                        self?.refreshControl.endRefreshing()
-                    }
+                   
                 }
             } catch {
                 print("Error parsing JSON: \(error)")
-                DispatchQueue.main.async {
-                    self?.refreshControl.endRefreshing()
-                }
+
             }
         }
         
